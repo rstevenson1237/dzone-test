@@ -9,6 +9,7 @@
 - **Platform:** Linux (primary), with cross-platform compatibility
 - **Version Control:** Git with GitHub
 - **Language:** GDScript (primary), with potential C# components for performance-critical AI
+- **Graphics:** Pure vector graphics - no external art assets, using Godot's built-in drawing nodes
 
 ## Development Phases
 
@@ -65,31 +66,45 @@
 - Simple visual effects for combat
 
 ### Phase 3: Arena and Visuals (Weeks 5-6)
-**Objective:** Create the distinctive D-Zone visual style and arena
+**Objective:** Create the distinctive D-Zone visual style using vector graphics only
+
+**Visual Philosophy:**
+- **Vector Graphics Only**: No sprite assets - pure geometric shapes and programmatic drawing
+- **Scalable Design**: Perfect clarity at any resolution
+- **Retro Aesthetic**: Embrace the original's clean, geometric look
+- **Minimal File Size**: No asset pipeline complexity
 
 **Tasks:**
-1. **Arena Design**
-   - Create space station arena background
-   - Implement boundary physics
-   - Add environmental visual elements
-   - Create the "floating tank" visual effect
+1. **Arena Design (Vector-Based)**
+   - Create space station arena using Line2D for boundaries
+   - Implement geometric patterns for space station aesthetic
+   - Add environmental elements using Polygon2D shapes
+   - Create backdrop using custom _draw() functions
 
-2. **Tank Visual Design**
-   - Design triangular tank sprites
-   - Implement three-cylinder tank design
-   - Add visible fuel animation effects
-   - Create unique color glows for each tank
+2. **Tank Visual Design (Vector-Based)**
+   - Implement triangular tank geometry using Polygon2D
+   - Create three-cylinder tank design with geometric shapes
+   - Add animated fuel effects using ColorRect and Line2D
+   - Unique color schemes per tank using Material properties
 
-3. **Visual Effects**
-   - Weapon fire effects
-   - Explosion animations
-   - Tank destruction sequences
-   - Atmospheric lighting effects
+3. **Visual Effects (Vector-Based)**
+   - Weapon fire effects using custom drawing and Line2D trails
+   - Explosion animations with expanding Polygon2D shapes
+   - Tank destruction using particle-like geometric fragments
+   - Atmospheric effects with custom _draw() methods
+
+**Technical Implementation:**
+- **Tanks**: Polygon2D with triangular geometry
+- **Projectiles**: ColorRect with optional Line2D trails (already implemented)
+- **Arena**: Line2D boundaries with geometric background patterns
+- **Effects**: Custom _draw() functions for dynamic visuals
+- **UI**: Pure Control nodes with geometric styling
 
 **Deliverables:**
-- Visually authentic recreation of D-Zone aesthetic
-- Animated tank sprites with fuel effects
-- Polished arena environment
+- Visually authentic recreation of D-Zone aesthetic using pure vector graphics
+- Scalable tank designs with animated geometric effects
+- Clean, geometric arena environment
+- No external art assets required
 
 ### Phase 4: Economy and Weapons (Weeks 7-9)
 **Objective:** Implement the core progression system
@@ -244,9 +259,10 @@ Tank (CharacterBody2D)
 ### Data Architecture
 
 - **JSON files** for weapon stats and configurations
-- **SQLite database** for persistent player statistics
+- **SQLite database** for persistent player statistics  
 - **Resource files** for tank and arena configurations
 - **Scene files** for reusable components
+- **No art assets** - all visuals generated programmatically using vector graphics
 
 ## Development Workflow
 

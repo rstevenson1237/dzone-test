@@ -13,11 +13,23 @@ var input_manager: InputManager
 var current_health: int = 100
 var max_health: int = 100
 var weapon_manager: WeaponManager
+var tank_visual: Node2D
 
 func _ready():
     input_manager = GameManager.input_manager
+    setup_tank_visual()
     setup_weapon_manager()
     print("Tank initialized for player %d" % (player_id + 1))
+
+func setup_tank_visual():
+    tank_visual = Node2D.new()
+    tank_visual.set_script(preload("res://scripts/tanks/TankVisual.gd"))
+    add_child(tank_visual)
+    
+    # Set player-specific color
+    var player_colors = [Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW, Color.MAGENTA, Color.CYAN]
+    if player_id < player_colors.size():
+        tank_visual.set_tank_color(player_colors[player_id])
 
 func setup_weapon_manager():
     weapon_manager = WeaponManager.new()
@@ -74,6 +86,8 @@ func check_boundaries():
 
 func take_damage(damage: int):
     current_health -= damage
+    if tank_visual:
+        tank_visual.set_health_percentage(get_health_percentage())
     if current_health <= 0:
         destroy_tank()
 

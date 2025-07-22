@@ -22,11 +22,9 @@ func _ready():
     collision_shape.shape = shape
     add_child(collision_shape)
     
-    var sprite = ColorRect.new()
-    sprite.color = Color.YELLOW
-    sprite.size = Vector2(6, 6)
-    sprite.position = Vector2(-3, -3)
-    add_child(sprite)
+    var visual = Node2D.new()
+    visual.set_script(preload("res://scripts/weapons/ProjectileVisual.gd"))
+    add_child(visual)
 
 func setup(start_pos: Vector2, dir: Vector2, proj_damage: int, proj_speed: float, proj_range: float, tank: Tank):
     start_position = start_pos
