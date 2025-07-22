@@ -1,6 +1,15 @@
-[gd_scene load_steps=1 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://c1hcx4bjhtrlc"]
 
-[node name="Arena Scene" type="Node2D"]
+[ext_resource type="PackedScene" uid="uid://c6oc4acdnvhcl" path="res://scenes/tanks/Tank.tscn" id="1_5o8k4"]
 
-# TODO: Implement Arena Scene
-# This is a stub file created by the project manager
+[node name="Arena" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.2, 1)
+
+[node name="Tank" parent="." instance=ExtResource("1_5o8k4")]
+position = Vector2(400, 300)
+player_id = 0
