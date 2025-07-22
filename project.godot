@@ -1,0 +1,34 @@
+; Engine configuration file.
+; This is an auto-generated file and should not be edited manually.
+; Please use the Project Settings dialog to configure the project.
+
+[application]
+
+config/name="D-Zone Clone"
+config/description="A modern recreation of the classic Destruction Zone tank combat game"
+run/main_scene="res://scenes/menus/MainMenu.tscn"
+config/features=PackedStringArray("4.2")
+config/icon="res://assets/sprites/ui/icon.svg"
+
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
+window/size/resizable=true
+
+[input]
+
+# Player 1 controls
+p1_move_up={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":87,"key_label":0,"unicode":119,"echo":false,"script":null)]
+}
+p1_move_down={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":83,"key_label":0,"unicode":115,"echo":false,"script":null)]
+}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
