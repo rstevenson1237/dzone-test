@@ -79,6 +79,9 @@ func get_rotation_input(player_id: int) -> float:
     
     return rotation
 
+func get_fire_input(player_id: int) -> bool:
+    return is_action_just_pressed("fire", player_id)
+
 func is_action_pressed(action: String, player_id: int) -> bool:
     if player_id >= MAX_PLAYERS or not active_players[player_id]:
         return false
