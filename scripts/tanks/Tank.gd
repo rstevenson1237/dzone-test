@@ -86,12 +86,24 @@ func check_boundaries():
 
 func take_damage(damage: int):
     current_health -= damage
+    print("Tank %d took %d damage, health: %d" % [player_id + 1, damage, current_health])
+    
     if tank_visual:
+        tank_visual.flash_damage()
         tank_visual.set_health_percentage(get_health_percentage())
+    
     if current_health <= 0:
         destroy_tank()
 
 func destroy_tank():
+    print("Tank %d destroyed!" % (player_id + 1))
+    
+    # Create explosion effect
+    var explosion = preload("res://scripts/effects/ExplosionEffect.gd").new()
+    get_parent().add_child(explosion)
+    explosion.global_position = global_position
+    explosion.start_explosion(tank_visual.tank_color if tank_visual else Color.GREEN)
+    
     tank_destroyed.emit(self)
     queue_free()
 

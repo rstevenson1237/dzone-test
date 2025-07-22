@@ -28,7 +28,7 @@ var input_maps = {
     }
 }
 
-var active_players = [true, false, false, false]
+var active_players = [true, true, false, false]
 
 func _ready():
     print("InputManager initialized")

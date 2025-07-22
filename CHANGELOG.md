@@ -1,5 +1,55 @@
 # Changelog
 
+## [Phase 2 Complete: Combat Basics] - 2025-07-22
+
+### Added
+- **Complete Combat System**: Fully functional 2-player tank combat
+  - Tank health system with visual feedback (color shifts from healthy to critical)
+  - Damage flash effects using smooth color transitions
+  - Vector explosion effects with animated fragments and central flash
+  - Real-time health tracking with console logging
+- **Multi-Tank Support**: Two-player gameplay with distinct controls
+  - Player 1: Green tank with WASD movement, QE rotation, Spacebar fire
+  - Player 2: Blue tank with Arrow keys, comma/period rotation, Enter fire
+  - Automatic player color assignment (Green, Blue, Red, Yellow, Magenta, Cyan)
+  - Self-damage prevention in projectile collision system
+- **Arena Management System**: Complete round-based gameplay
+  - 5-round tournament structure with win tracking
+  - Automatic respawn system with 3-second delay
+  - Round end detection and winner announcement
+  - Final score calculation and game restart functionality
+- **Game HUD System**: User interface for gameplay guidance
+  - Player control instructions and identification
+  - Real-time round information display
+  - Clear visual feedback for game state
+
+### Technical Implementation
+- **ExplosionEffect.gd**: Vector-based destruction animations with fragments
+- **ArenaManager.gd**: Round management, respawn system, and game flow
+- **GameHUD.gd**: Player instruction display and UI management
+- Enhanced TankVisual.gd with health-based color transitions and damage flashing
+- Multi-player input support with Player 2 activation in InputManager
+- Tank destruction with proper signal handling and visual effects
+
+### Gameplay Features
+- Tank vs tank combat with projectile damage system
+- Health visualization through color changes (green → red tint → critical fade)
+- Spectacular destruction effects using geometric fragment explosion
+- Round-based gameplay with respawn mechanics
+- Tournament scoring system with final winner determination
+- Automatic game restart after completion
+
+### Files Modified
+- `scripts/tanks/Tank.gd` - Enhanced destruction and health feedback
+- `scripts/tanks/TankVisual.gd` - Advanced health visualization and damage effects
+- `scripts/core/InputManager.gd` - Player 2 activation and input handling
+- `scenes/arena/Arena.tscn` - Two-player setup with arena management and HUD
+
+### Files Added
+- `scripts/effects/ExplosionEffect.gd` - Vector explosion animation system
+- `scripts/arena/ArenaManager.gd` - Round management and game flow control
+- `scripts/ui/GameHUD.gd` - Player instructions and game state display
+
 ## [Vector Graphics Implementation] - 2025-07-22
 
 ### Added

@@ -50,7 +50,27 @@ func set_tank_color(color: Color):
     queue_redraw()
 
 func set_health_percentage(health_pct: float):
-    # Slightly fade tank when damaged
-    var alpha = 0.6 + (0.4 * health_pct)
-    tank_color.a = alpha
+    # Color shift and fade based on health
+    if health_pct > 0.7:
+        # Healthy - normal color
+        tank_color.a = 1.0
+    elif health_pct > 0.3:
+        # Damaged - slightly faded with red tint
+        tank_color = tank_color.lerp(Color.RED, 0.3)
+        tank_color.a = 0.9
+    else:
+        # Critical - more red and faded
+        tank_color = tank_color.lerp(Color.RED, 0.6)
+        tank_color.a = 0.7
+    
     queue_redraw()
+
+func flash_damage():
+    # Visual damage flash effect
+    var original_color = tank_color
+    tank_color = Color.WHITE
+    queue_redraw()
+    
+    # Return to normal after brief flash
+    var tween = create_tween()
+    tween.tween_method(func(color): tank_color = color; queue_redraw(), Color.WHITE, original_color, 0.2)
