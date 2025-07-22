@@ -45,15 +45,17 @@ func handle_input(delta):
     if not input_manager:
         return
     
-    var movement_input = input_manager.get_movement_vector(player_id)
+    var forward_input = input_manager.get_forward_movement(player_id)
     var rotation_input = input_manager.get_rotation_input(player_id)
     var fire_input = input_manager.get_fire_input(player_id)
     
     if rotation_input != 0:
         rotation += rotation_input * rotation_speed * delta
     
-    if movement_input.length() > 0:
-        var target_velocity = movement_input * max_speed
+    if forward_input != 0:
+        # Move only in the direction the tank is facing
+        var forward_direction = Vector2.UP.rotated(rotation)
+        var target_velocity = forward_direction * forward_input * max_speed
         velocity = velocity.move_toward(target_velocity, acceleration * delta)
     else:
         velocity = velocity.move_toward(Vector2.ZERO, friction * delta)

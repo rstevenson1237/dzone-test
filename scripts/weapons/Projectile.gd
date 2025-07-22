@@ -14,6 +14,9 @@ var distance_traveled: float = 0.0
 var owner_tank: Tank
 
 func _ready():
+    # Disable gravity for authentic D-Zone projectile physics
+    gravity_scale = 0.0
+    
     body_entered.connect(_on_body_entered)
     
     var collision_shape = CollisionShape2D.new()

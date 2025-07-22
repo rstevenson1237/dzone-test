@@ -64,6 +64,22 @@ func get_movement_vector(player_id: int) -> Vector2:
     
     return movement.normalized()
 
+func get_forward_movement(player_id: int) -> float:
+    if player_id >= MAX_PLAYERS or not active_players[player_id]:
+        return 0.0
+    
+    var forward_input = 0.0
+    
+    if player_id in input_maps:
+        var actions = input_maps[player_id]
+        if Input.is_action_pressed(actions["move_up"]):
+            forward_input += 1.0  # Forward
+        if Input.is_action_pressed(actions["move_down"]):
+            forward_input -= 1.0  # Backward
+        # Note: move_left and move_right are now ignored for tank movement
+    
+    return forward_input
+
 func get_rotation_input(player_id: int) -> float:
     if player_id >= MAX_PLAYERS or not active_players[player_id]:
         return 0.0
@@ -108,19 +124,19 @@ func set_player_active(player_id: int, active: bool):
 func setup_default_input_map():
     ensure_input_action_exists("p1_move_up", KEY_W)
     ensure_input_action_exists("p1_move_down", KEY_S) 
-    ensure_input_action_exists("p1_move_left", KEY_A)
-    ensure_input_action_exists("p1_move_right", KEY_D)
-    ensure_input_action_exists("p1_rotate_left", KEY_Q)
-    ensure_input_action_exists("p1_rotate_right", KEY_E)
+    ensure_input_action_exists("p1_move_left", KEY_A)  # Not used for movement now
+    ensure_input_action_exists("p1_move_right", KEY_D)  # Not used for movement now
+    ensure_input_action_exists("p1_rotate_left", KEY_A)  # Changed from Q to A
+    ensure_input_action_exists("p1_rotate_right", KEY_D)  # Changed from E to D
     ensure_input_action_exists("p1_fire", KEY_SPACE)
     ensure_input_action_exists("p1_special", KEY_SHIFT)
     
     ensure_input_action_exists("p2_move_up", KEY_UP)
     ensure_input_action_exists("p2_move_down", KEY_DOWN)
-    ensure_input_action_exists("p2_move_left", KEY_LEFT)
-    ensure_input_action_exists("p2_move_right", KEY_RIGHT)
-    ensure_input_action_exists("p2_rotate_left", KEY_COMMA)
-    ensure_input_action_exists("p2_rotate_right", KEY_PERIOD)
+    ensure_input_action_exists("p2_move_left", KEY_LEFT)  # Not used for movement now
+    ensure_input_action_exists("p2_move_right", KEY_RIGHT)  # Not used for movement now
+    ensure_input_action_exists("p2_rotate_left", KEY_LEFT)  # Changed from COMMA to LEFT
+    ensure_input_action_exists("p2_rotate_right", KEY_RIGHT)  # Changed from PERIOD to RIGHT
     ensure_input_action_exists("p2_fire", KEY_ENTER)
     ensure_input_action_exists("p2_special", KEY_CTRL)
 
