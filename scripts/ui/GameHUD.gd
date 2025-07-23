@@ -2,10 +2,12 @@ extends Control
 
 var player_labels: Array[Label] = []
 var money_label: Label
+var pause_menu: Control
 
 func _ready():
     setup_player_labels()
     setup_money_display()
+    setup_pause_menu()
     
     # Connect to money changes
     if GameManager:
@@ -30,7 +32,7 @@ func setup_player_labels():
     
     # Instructions
     var instructions = Label.new()
-    instructions.text = "Destroy the other tank to win the round!\nMove: W/S - Up/Down | Rotate: A/D - Left/Right | Fire: Space/Enter\nCycle Weapons: Shift/Ctrl"
+    instructions.text = "Destroy the other tank to win the round!\nMove: W/S - Up/Down | Rotate: A/D - Left/Right | Fire: Space/Enter\nCycle Weapons: Shift/Ctrl | Pause: ESC"
     instructions.position = Vector2(200, 50)
     instructions.add_theme_color_override("font_color", Color.WHITE)
     add_child(instructions)
@@ -42,6 +44,30 @@ func setup_money_display():
     money_label.add_theme_color_override("font_color", Color.YELLOW)
     money_label.add_theme_font_size_override("font_size", 24)
     add_child(money_label)
+
+func setup_pause_menu():
+    var pause_scene = preload("res://scripts/ui/PauseMenu.gd")
+    pause_menu = Control.new()
+    pause_menu.set_script(pause_scene)
+    add_child(pause_menu)
+    
+    pause_menu.resume_game.connect(_on_resume_game)
+    pause_menu.restart_game.connect(_on_restart_game)
+    pause_menu.return_to_menu.connect(_on_return_to_menu)
+
+func _input(event):
+    if event.is_action_pressed("ui_cancel") and not pause_menu.is_visible_in_tree():
+        pause_menu.show_pause_menu()
+
+func _on_resume_game():
+    # Game automatically resumes via pause menu
+    pass
+
+func _on_restart_game():
+    get_tree().reload_current_scene()
+
+func _on_return_to_menu():
+    GameManager.scene_manager.change_scene("res://scenes/menus/MainMenu.tscn")
 
 func _on_money_changed(new_amount: int):
     if money_label:

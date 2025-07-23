@@ -14,41 +14,75 @@ func _ready():
     update_money_display()
 
 func setup_shop_ui():
-    # Dark background
+    # Set up full screen layout
+    set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    
+    # Dark background with border
     var background = ColorRect.new()
-    background.color = Color(0.1, 0.1, 0.2, 0.9)
-    background.size = get_viewport().size
+    background.color = Color(0.05, 0.05, 0.15, 0.95)
+    background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     add_child(background)
+    
+    # Header container
+    var header_container = VBoxContainer.new()
+    header_container.position = Vector2(50, 30)
+    header_container.size = Vector2(924, 100)
+    add_child(header_container)
     
     # Shop title
     var title = Label.new()
-    title.text = "WEAPON SHOP"
-    title.position = Vector2(400, 50)
-    title.add_theme_color_override("font_color", Color.WHITE)
-    title.add_theme_font_size_override("font_size", 32)
-    add_child(title)
+    title.text = "═══ WEAPON SHOP ═══"
+    title.add_theme_color_override("font_color", Color.CYAN)
+    title.add_theme_font_size_override("font_size", 36)
+    title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    header_container.add_child(title)
     
     # Money display
     money_label = Label.new()
-    money_label.position = Vector2(50, 100)
     money_label.add_theme_color_override("font_color", Color.YELLOW)
-    money_label.add_theme_font_size_override("font_size", 24)
-    add_child(money_label)
+    money_label.add_theme_font_size_override("font_size", 28)
+    money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    header_container.add_child(money_label)
     
-    # Close button
-    var close_button = Button.new()
-    close_button.text = "Continue to Battle"
-    close_button.position = Vector2(700, 600)
-    close_button.size = Vector2(200, 50)
-    close_button.pressed.connect(_on_close_pressed)
-    add_child(close_button)
+    # Main content area
+    var content_container = VBoxContainer.new()
+    content_container.position = Vector2(50, 150)
+    content_container.size = Vector2(924, 450)
+    content_container.add_theme_constant_override("separation", 15)
+    add_child(content_container)
     
     # Instructions
     var instructions = Label.new()
-    instructions.text = "Click on weapons to purchase. Green = affordable, Red = too expensive"
-    instructions.position = Vector2(50, 650)
+    instructions.text = "Choose weapons to enhance your tank's firepower • Green = Affordable • Red = Too Expensive"
     instructions.add_theme_color_override("font_color", Color.WHITE)
-    add_child(instructions)
+    instructions.add_theme_font_size_override("font_size", 18)
+    instructions.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    content_container.add_child(instructions)
+    
+    # Weapons grid container
+    var weapons_container = GridContainer.new()
+    weapons_container.columns = 2
+    weapons_container.add_theme_constant_override("h_separation", 20)
+    weapons_container.add_theme_constant_override("v_separation", 15)
+    content_container.add_child(weapons_container)
+    
+    # Store reference for weapon buttons
+    self.set_meta("weapons_container", weapons_container)
+    
+    # Footer container
+    var footer_container = HBoxContainer.new()
+    footer_container.position = Vector2(50, 620)
+    footer_container.size = Vector2(924, 80)
+    footer_container.alignment = BoxContainer.ALIGNMENT_CENTER
+    add_child(footer_container)
+    
+    # Close button
+    var close_button = Button.new()
+    close_button.text = "⚔ CONTINUE TO BATTLE ⚔"
+    close_button.add_theme_font_size_override("font_size", 24)
+    close_button.custom_minimum_size = Vector2(300, 60)
+    close_button.pressed.connect(_on_close_pressed)
+    footer_container.add_child(close_button)
 
 func setup_available_weapons():
     available_weapons = [
@@ -112,20 +146,34 @@ func setup_available_weapons():
     create_weapon_buttons()
 
 func create_weapon_buttons():
+    var weapons_container = self.get_meta("weapons_container")
+    
     for i in range(available_weapons.size()):
         var weapon = available_weapons[i]
+        
+        # Create weapon card container
+        var weapon_card = VBoxContainer.new()
+        weapon_card.custom_minimum_size = Vector2(440, 120)
+        weapon_card.add_theme_constant_override("separation", 5)
+        
+        # Weapon button
         var button = Button.new()
-        
-        button.text = "%s - $%d\n%s\nDamage: %d | Rate: %.1f | Range: %d" % [
-            weapon.name, weapon.cost, weapon.description, 
-            weapon.damage, weapon.fire_rate, weapon.range
-        ]
-        
-        button.position = Vector2(50 + (i % 3) * 300, 150 + (i / 3) * 120)
-        button.size = Vector2(280, 100)
+        button.text = "🔫 %s - $%d" % [weapon.name, weapon.cost]
+        button.add_theme_font_size_override("font_size", 20)
+        button.custom_minimum_size = Vector2(440, 50)
         button.pressed.connect(_on_weapon_button_pressed.bind(weapon))
+        weapon_card.add_child(button)
         
-        add_child(button)
+        # Weapon stats
+        var stats_label = Label.new()
+        stats_label.text = "%s\nDamage: %d | Fire Rate: %.1f/s | Range: %d" % [
+            weapon.description, weapon.damage, weapon.fire_rate, weapon.range
+        ]
+        stats_label.add_theme_font_size_override("font_size", 14)
+        stats_label.add_theme_color_override("font_color", Color.LIGHT_GRAY)
+        weapon_card.add_child(stats_label)
+        
+        weapons_container.add_child(weapon_card)
         weapon_buttons.append(button)
     
     update_button_colors()

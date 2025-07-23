@@ -19,6 +19,7 @@ var scene_manager: SceneManager
 var economy_manager: EconomyManager
 var input_manager: InputManager
 var event_bus: EventBus
+var audio_manager: AudioManager
 
 func _ready():
 	setup_managers()
@@ -40,6 +41,9 @@ func setup_managers():
 	
 	event_bus = EventBus.new()
 	add_child(event_bus)
+	
+	audio_manager = AudioManager.new()
+	add_child(audio_manager)
 	
 	connect_signals()
 

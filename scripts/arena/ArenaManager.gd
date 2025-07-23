@@ -145,13 +145,8 @@ func end_game():
     else:
         print("GAME DRAW!")
     
-    # Restart after delay
-    var timer = Timer.new()
-    timer.wait_time = 5.0
-    timer.one_shot = true
-    add_child(timer)
-    timer.timeout.connect(func(): restart_game(); timer.queue_free())
-    timer.start()
+    # Show game over screen
+    show_game_over_screen({"winner": game_winner, "scores": scores})
 
 func award_round_money(winner_player_id: int):
     var base_reward = 200
@@ -197,6 +192,24 @@ func _on_weapon_purchased(weapon_data: Dictionary):
             var new_weapon = tank.weapon_manager.create_weapon_from_data(weapon_data)
             tank.weapon_manager.add_weapon(new_weapon)
             print("Added %s to Player %d's arsenal" % [weapon_data.name, tank.player_id + 1])
+
+func show_game_over_screen(results: Dictionary):
+    var game_over_scene = preload("res://scripts/ui/GameOverScreen.gd")
+    var game_over_screen = Control.new()
+    game_over_screen.set_script(game_over_scene)
+    
+    get_tree().current_scene.add_child(game_over_screen)
+    game_over_screen.restart_game.connect(_on_restart_game)
+    game_over_screen.return_to_menu.connect(_on_return_to_menu)
+    game_over_screen.show_game_over(results)
+
+func _on_restart_game():
+    print("Restarting game...")
+    get_tree().reload_current_scene()
+
+func _on_return_to_menu():
+    print("Returning to main menu...")
+    GameManager.scene_manager.change_scene("res://scenes/menus/MainMenu.tscn")
 
 func restart_game():
     print("Restarting game...")
