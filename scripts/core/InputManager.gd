@@ -143,7 +143,11 @@ func setup_default_input_map():
 func ensure_input_action_exists(action_name: String, key_code: int):
     if not InputMap.has_action(action_name):
         InputMap.add_action(action_name)
-        var event = InputEventKey.new()
-        event.keycode = key_code
-        InputMap.action_add_event(action_name, event)
-        print("Added input action: %s -> %s" % [action_name, OS.get_keycode_string(key_code)])
+    else:
+        # Clear existing events to avoid conflicts
+        InputMap.action_erase_events(action_name)
+    
+    var event = InputEventKey.new()
+    event.keycode = key_code
+    InputMap.action_add_event(action_name, event)
+    print("Set input action: %s -> %s" % [action_name, OS.get_keycode_string(key_code)])
