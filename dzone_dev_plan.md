@@ -123,11 +123,11 @@
 
 3. **Weapon Variety**
    - Implement 15-20 different weapon types:
-     - Standard missiles
-     - Laser weapons
-     - Explosive weapons
-     - Defensive systems (shields)
-     - Special weapons (death touch, etc.)
+	 - Standard missiles
+	 - Laser weapons
+	 - Explosive weapons
+	 - Defensive systems (shields)
+	 - Special weapons (death touch, etc.)
    - Balance weapon costs and effectiveness
    - Create weapon upgrade paths
 

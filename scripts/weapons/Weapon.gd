@@ -53,8 +53,17 @@ func fire(start_position: Vector2, direction: Vector2) -> Projectile:
     
     return projectile
 
-func create_projectile(start_position: Vector2, direction: Vector2) -> Projectile:
-    var projectile = preload("res://scripts/weapons/Projectile.gd").new()
+func create_projectile(start_position: Vector2, direction: Vector2):
+    var projectile
+    
+    match weapon_type:
+        WeaponType.LASER:
+            projectile = preload("res://scripts/weapons/LaserProjectile.gd").new()
+        WeaponType.EXPLOSIVE:
+            projectile = preload("res://scripts/weapons/ExplosiveProjectile.gd").new()
+        _:  # MISSILE and others
+            projectile = preload("res://scripts/weapons/Projectile.gd").new()
+    
     projectile.setup(start_position, direction, damage, projectile_speed, projectile_range, owner_tank)
     return projectile
 

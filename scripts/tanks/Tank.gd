@@ -48,6 +48,7 @@ func handle_input(delta):
     var forward_input = input_manager.get_forward_movement(player_id)
     var rotation_input = input_manager.get_rotation_input(player_id)
     var fire_input = input_manager.get_fire_input(player_id)
+    var special_input = input_manager.is_action_just_pressed("special", player_id)
     
     if rotation_input != 0:
         rotation += rotation_input * rotation_speed * delta
@@ -63,7 +64,11 @@ func handle_input(delta):
     if fire_input and weapon_manager:
         var fire_direction = Vector2.UP.rotated(rotation)
         var fire_position = global_position + fire_direction * 20
-        weapon_manager.fire_primary_weapon(fire_position, fire_direction)
+        weapon_manager.fire_current_weapon(fire_position, fire_direction)
+    
+    if special_input and weapon_manager:
+        weapon_manager.cycle_weapons()
+        print("Player %d cycled weapons" % (player_id + 1))
 
 func apply_movement(delta):
     move_and_slide()

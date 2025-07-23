@@ -1,9 +1,15 @@
 extends Control
 
 var player_labels: Array[Label] = []
+var money_label: Label
 
 func _ready():
     setup_player_labels()
+    setup_money_display()
+    
+    # Connect to money changes
+    if GameManager:
+        GameManager.player_money_changed.connect(_on_money_changed)
 
 func setup_player_labels():
     # Player 1 label (top-left)
@@ -24,7 +30,19 @@ func setup_player_labels():
     
     # Instructions
     var instructions = Label.new()
-    instructions.text = "Destroy the other tank to win the round!\nMove: W/S - Up/Down | Rotate: A/D - Left/Right | Fire: Space/Enter"
+    instructions.text = "Destroy the other tank to win the round!\nMove: W/S - Up/Down | Rotate: A/D - Left/Right | Fire: Space/Enter\nCycle Weapons: Shift/Ctrl"
     instructions.position = Vector2(200, 50)
     instructions.add_theme_color_override("font_color", Color.WHITE)
     add_child(instructions)
+
+func setup_money_display():
+    money_label = Label.new()
+    money_label.text = "Money: $1000"
+    money_label.position = Vector2(10, 100)
+    money_label.add_theme_color_override("font_color", Color.YELLOW)
+    money_label.add_theme_font_size_override("font_size", 24)
+    add_child(money_label)
+
+func _on_money_changed(new_amount: int):
+    if money_label:
+        money_label.text = "Money: $%d" % new_amount

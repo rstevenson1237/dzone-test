@@ -1,0 +1,3 @@
+res://scenes/menus/MainMenu.tscn
+res://scenes/arena/Arena.tscn
+res://scripts/core/InputManager.gd

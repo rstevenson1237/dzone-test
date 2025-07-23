@@ -1,6 +1,3 @@
-[gd_scene load_steps=1 format=3]
+[gd_scene format=3 uid="uid://dn20ybseh0pcs"]
 
 [node name="HUD Scene" type="Node2D"]
-
-# TODO: Implement HUD Scene
-# This is a stub file created by the project manager

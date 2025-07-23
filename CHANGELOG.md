@@ -1,5 +1,59 @@
 # Changelog
 
+## [Phase 4 Complete: Economy and Weapons] - 2025-07-23
+
+### Added
+- **Complete Economy System**: Money accumulation and spending mechanics
+  - Round-based money rewards: $200 base + $50 per round for winners
+  - Draw compensation: $50 for both players in tied rounds
+  - Real-time money display in game HUD with yellow color coding
+  - Money persistence between rounds and weapon purchases
+- **Weapon Shop System**: Comprehensive weapon purchasing interface
+  - 5 distinct weapon types with balanced costs and capabilities
+  - Visual affordability indicators (green = affordable, red = too expensive)
+  - Shop opens automatically between rounds for strategic purchasing
+  - Weapon information display with damage, cost, and special properties
+- **Weapon Variety Implementation**: Five unique weapon types
+  - **Basic Missile** (Free): 15 damage, standard projectile
+  - **Heavy Missile** ($300): 25 damage, powerful impact
+  - **Rapid Fire** ($200): 10 damage, 5.0 fire rate for sustained assault
+  - **Laser Cannon** ($500): 20 damage, high-speed cyan projectiles
+  - **Explosive Shell** ($400): 30 damage, area-of-effect with explosion radius
+- **Weapon Management System**: Complete arsenal control
+  - Weapon cycling with Shift/Ctrl keys during combat
+  - Visual weapon switching feedback with console notifications
+  - Support for up to 7 weapons per tank with individual characteristics
+  - Seamless integration between shop purchases and tank equipment
+
+### Technical Implementation
+- **WeaponShop.gd**: Complete shop UI with affordability checking and purchase handling
+- **LaserProjectile.gd**: High-speed cyan laser projectiles with 600 speed
+- **ExplosiveProjectile.gd**: Area damage with 50-pixel explosion radius
+- **ArenaManager.gd**: Money rewards integration with round progression
+- **GameHUD.gd**: Money display and weapon cycling instructions
+- Enhanced WeaponManager with weapon cycling and current weapon tracking
+- Weapon type-specific projectile creation in Weapon.gd
+
+### Gameplay Features
+- Strategic economy: Earn money through combat performance
+- Risk vs reward: Expensive weapons provide combat advantages
+- Tactical decisions: Choose between sustained fire or heavy damage
+- Progressive gameplay: Later rounds offer higher money rewards
+- Arsenal management: Cycle through purchased weapons during battle
+- Visual feedback: Clear money display and weapon switching indicators
+
+### Files Modified
+- `scripts/arena/ArenaManager.gd` - Money reward system and shop integration
+- `scripts/ui/GameHUD.gd` - Money display and weapon instructions
+- `scripts/weapons/WeaponManager.gd` - Weapon cycling and current weapon tracking
+- `scripts/weapons/Weapon.gd` - Weapon type-specific projectile creation
+- `scripts/tanks/Tank.gd` - Weapon cycling controls integration
+
+### Files Added
+- `scripts/ui/WeaponShop.gd` - Complete weapon shop interface and purchasing system
+- `scripts/weapons/LaserProjectile.gd` - High-speed laser weapon projectiles
+- `scripts/weapons/ExplosiveProjectile.gd` - Area-of-effect explosive projectiles
+
 ## [Phase 2 Complete: Combat Basics] - 2025-07-22
 
 ### Added

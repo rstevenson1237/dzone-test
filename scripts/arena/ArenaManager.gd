@@ -57,18 +57,20 @@ func check_round_end():
     var alive_tanks = get_alive_tanks()
     
     if alive_tanks.size() <= 1:
-        # Round over
+        # Round over - award money
         if alive_tanks.size() == 1:
             var winner = alive_tanks[0]
             print("Round %d winner: Player %d!" % [current_round, winner.player_id + 1])
             round_winners.append(winner.player_id)
+            award_round_money(winner.player_id)
         else:
             print("Round %d: Draw!" % current_round)
             round_winners.append(-1)  # Draw
+            award_draw_money()
         
         # Start next round or end game
         if current_round < max_rounds:
-            start_next_round()
+            open_weapon_shop()
         else:
             end_game()
 
@@ -150,6 +152,51 @@ func end_game():
     add_child(timer)
     timer.timeout.connect(func(): restart_game(); timer.queue_free())
     timer.start()
+
+func award_round_money(winner_player_id: int):
+    var base_reward = 200
+    var round_bonus = current_round * 50  # More money in later rounds
+    var total_reward = base_reward + round_bonus
+    
+    GameManager.add_money(total_reward)
+    print("Player %d earned $%d for winning round %d!" % [winner_player_id + 1, total_reward, current_round])
+
+func award_draw_money():
+    var draw_reward = 50
+    GameManager.add_money(draw_reward)
+    print("Draw - both players earn $%d" % draw_reward)
+
+func award_kill_money(killer_player_id: int):
+    var kill_reward = 25
+    GameManager.add_money(kill_reward)
+    print("Player %d earned $%d for elimination!" % [killer_player_id + 1, kill_reward])
+
+func open_weapon_shop():
+    print("Opening weapon shop between rounds...")
+    
+    var shop_scene = preload("res://scripts/ui/WeaponShop.gd")
+    var shop = Control.new()
+    shop.set_script(shop_scene)
+    
+    get_tree().current_scene.add_child(shop)
+    shop.shop_closed.connect(_on_shop_closed)
+    shop.weapon_purchased.connect(_on_weapon_purchased)
+
+func _on_shop_closed():
+    print("Shop closed, starting next round...")
+    start_next_round()
+
+func _on_weapon_purchased(weapon_data: Dictionary):
+    print("Weapon purchased: %s" % weapon_data.name)
+    
+    # Find the first alive tank (for simplicity, assume Player 1 gets the weapon)
+    var alive_tanks = get_alive_tanks()
+    if alive_tanks.size() > 0:
+        var tank = alive_tanks[0]
+        if tank.weapon_manager:
+            var new_weapon = tank.weapon_manager.create_weapon_from_data(weapon_data)
+            tank.weapon_manager.add_weapon(new_weapon)
+            print("Added %s to Player %d's arsenal" % [weapon_data.name, tank.player_id + 1])
 
 func restart_game():
     print("Restarting game...")
