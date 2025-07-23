@@ -63,14 +63,14 @@ func remove_weapon(weapon: Weapon) -> bool:
     weapon_removed.emit(weapon)
     return true
 
-func fire_weapon(weapon_index: int, start_position: Vector2, direction: Vector2) -> Projectile:
+func fire_weapon(weapon_index: int, start_position: Vector2, direction: Vector2) -> BaseProjectile:
     if weapon_index < 0 or weapon_index >= equipped_weapons.size():
         return null
     
     var weapon = equipped_weapons[weapon_index]
     return weapon.fire(start_position, direction)
 
-func fire_primary_weapon(start_position: Vector2, direction: Vector2) -> Projectile:
+func fire_primary_weapon(start_position: Vector2, direction: Vector2) -> BaseProjectile:
     return fire_weapon(0, start_position, direction)
 
 func get_weapon_count() -> int:
@@ -91,5 +91,5 @@ func cycle_weapons():
         current_weapon_index = (current_weapon_index + 1) % equipped_weapons.size()
         print("Switched to weapon: %s" % equipped_weapons[current_weapon_index].weapon_name)
 
-func fire_current_weapon(start_position: Vector2, direction: Vector2) -> Projectile:
+func fire_current_weapon(start_position: Vector2, direction: Vector2) -> BaseProjectile:
     return fire_weapon(current_weapon_index, start_position, direction)

@@ -17,9 +17,29 @@ var tank_visual: Node2D
 
 func _ready():
     input_manager = GameManager.input_manager
+    setup_collision()
     setup_tank_visual()
     setup_weapon_manager()
     print("Tank initialized for player %d" % (player_id + 1))
+
+func setup_collision():
+    """Configure tank collision using collision manager"""
+    if GameManager and GameManager.collision_manager:
+        GameManager.collision_manager.configure_tank(self)
+        GameManager.collision_manager.debug_collision(self, "TANK")
+        print("Tank %d collision configured: layer=%d, mask=%d" % [player_id + 1, collision_layer, collision_mask])
+        
+        # Ensure collision layer is properly set for Area2D detection
+        set_collision_layer(collision_layer)
+        set_collision_mask(collision_mask)
+        print("🏷️  Tank %d layer/mask explicitly set: layer=%d, mask=%d" % [player_id + 1, get_collision_layer(), get_collision_mask()])
+        
+        # Validate that tank can be detected by projectiles
+        var projectile_mask = 1 | 4 | 16  # TANKS | ENVIRONMENT | SHIELDS
+        var can_be_hit = (get_collision_layer() & projectile_mask) != 0
+        print("🎯 Tank %d can be hit by projectiles: %s (layer=%d, projectile_mask=%d)" % [player_id + 1, can_be_hit, get_collision_layer(), projectile_mask])
+    else:
+        print("WARNING: Tank %d - No collision manager available!" % (player_id + 1))
 
 func setup_tank_visual():
     tank_visual = Node2D.new()
@@ -93,13 +113,17 @@ func check_boundaries():
 
 func take_damage(damage: int):
     current_health -= damage
-    print("Tank %d took %d damage, health: %d" % [player_id + 1, damage, current_health])
+    print("💔 Tank %d took %d damage, health: %d/%d" % [player_id + 1, damage, current_health, max_health])
     
     if tank_visual:
         tank_visual.flash_damage()
         tank_visual.set_health_percentage(get_health_percentage())
+        print("   🎨 Visual feedback applied")
+    else:
+        print("   ⚠️  No tank visual for feedback")
     
     if current_health <= 0:
+        print("💀 Tank %d health depleted - destroying!" % (player_id + 1))
         destroy_tank()
 
 func destroy_tank():

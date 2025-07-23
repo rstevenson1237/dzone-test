@@ -20,10 +20,23 @@ var economy_manager: EconomyManager
 var input_manager: InputManager
 var event_bus: EventBus
 var audio_manager: AudioManager
+var collision_manager: CollisionManager
 
 func _ready():
 	setup_managers()
 	print("GameManager initialized as singleton")
+	
+	# Debug collision system after a short delay
+	var timer = Timer.new()
+	timer.wait_time = 1.0
+	timer.one_shot = true
+	timer.timeout.connect(_debug_collision_system)
+	add_child(timer)
+	timer.start()
+
+func _debug_collision_system():
+	if collision_manager:
+		collision_manager.validate_collision_setup()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -44,6 +57,9 @@ func setup_managers():
 	
 	audio_manager = AudioManager.new()
 	add_child(audio_manager)
+	
+	collision_manager = CollisionManager.new()
+	add_child(collision_manager)
 	
 	connect_signals()
 
@@ -91,6 +107,9 @@ func pause_game():
 func unpause_game():
 	get_tree().paused = false
 	change_game_state(GameState.IN_BATTLE)
+
+func get_collision_manager() -> CollisionManager:
+	return collision_manager
 
 func _on_money_changed(new_amount: int):
 	player_money = new_amount

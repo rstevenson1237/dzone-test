@@ -1,14 +1,14 @@
 extends Node2D
 class_name Weapon
 
-signal weapon_fired(projectile: Projectile)
+signal weapon_fired(projectile: BaseProjectile)
 
 enum WeaponType {
-    MISSILE,
-    LASER,
-    EXPLOSIVE,
-    DEFENSIVE,
-    SPECIAL
+	MISSILE,
+	LASER,
+	EXPLOSIVE,
+	DEFENSIVE,
+	SPECIAL
 }
 
 @export var weapon_name: String = "Basic Weapon"
@@ -24,55 +24,55 @@ var last_fire_time: float = 0.0
 var owner_tank: Tank
 
 func _ready():
-    print("Weapon '%s' initialized" % weapon_name)
+	print("Weapon '%s' initialized" % weapon_name)
 
 func can_fire() -> bool:
-    var current_time = Time.get_time_dict_from_system()
-    var current_timestamp = current_time.hour * 3600 + current_time.minute * 60 + current_time.second
-    var time_since_last_fire = current_timestamp - last_fire_time
-    
-    if ammo_count == 0:
-        return false
-    
-    return time_since_last_fire >= (1.0 / fire_rate)
+	var current_time = Time.get_time_dict_from_system()
+	var current_timestamp = current_time.hour * 3600 + current_time.minute * 60 + current_time.second
+	var time_since_last_fire = current_timestamp - last_fire_time
+	
+	if ammo_count == 0:
+		return false
+	
+	return time_since_last_fire >= (1.0 / fire_rate)
 
-func fire(start_position: Vector2, direction: Vector2) -> Projectile:
-    if not can_fire():
-        return null
-    
-    var projectile = create_projectile(start_position, direction)
-    if projectile:
-        var current_time = Time.get_time_dict_from_system()
-        last_fire_time = current_time.hour * 3600 + current_time.minute * 60 + current_time.second
-        
-        if ammo_count > 0:
-            ammo_count -= 1
-        
-        weapon_fired.emit(projectile)
-        get_tree().current_scene.add_child(projectile)
-    
-    return projectile
+func fire(start_position: Vector2, direction: Vector2) -> BaseProjectile:
+	if not can_fire():
+		return null
+	
+	var projectile = create_projectile(start_position, direction)
+	if projectile:
+		var current_time = Time.get_time_dict_from_system()
+		last_fire_time = current_time.hour * 3600 + current_time.minute * 60 + current_time.second
+		
+		if ammo_count > 0:
+			ammo_count -= 1
+		
+		weapon_fired.emit(projectile)
+		get_tree().current_scene.add_child(projectile)
+	
+	return projectile
 
-func create_projectile(start_position: Vector2, direction: Vector2):
-    var projectile
-    
-    match weapon_type:
-        WeaponType.LASER:
-            projectile = preload("res://scripts/weapons/LaserProjectile.gd").new()
-        WeaponType.EXPLOSIVE:
-            projectile = preload("res://scripts/weapons/ExplosiveProjectile.gd").new()
-        _:  # MISSILE and others
-            projectile = preload("res://scripts/weapons/Projectile.gd").new()
-    
-    projectile.setup(start_position, direction, damage, projectile_speed, projectile_range, owner_tank)
-    return projectile
+func create_projectile(start_position: Vector2, direction: Vector2) -> BaseProjectile:
+	var projectile
+	
+	match weapon_type:
+		WeaponType.LASER:
+			projectile = LaserProjectileNew.new()
+		WeaponType.EXPLOSIVE:
+			projectile = ExplosiveProjectileNew.new()
+		_:  # MISSILE and others
+			projectile = StandardProjectile.new()
+	
+	projectile.setup(start_position, direction, damage, projectile_speed, projectile_range, owner_tank)
+	return projectile
 
 func get_weapon_info() -> Dictionary:
-    return {
-        "name": weapon_name,
-        "type": weapon_type,
-        "damage": damage,
-        "cost": cost,
-        "fire_rate": fire_rate,
-        "ammo": ammo_count
-    }
+	return {
+		"name": weapon_name,
+		"type": weapon_type,
+		"damage": damage,
+		"cost": cost,
+		"fire_rate": fire_rate,
+		"ammo": ammo_count
+	}
